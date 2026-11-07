@@ -1,0 +1,13 @@
+# Netlify settings for the SpotLight website
+
+[build]
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
+
+# The forms post to /api/enquiry; this forwards it to the email function.
+[[redirects]]
+  from = "/api/enquiry"
+  to = "/.netlify/functions/enquiry"
+  status = 200

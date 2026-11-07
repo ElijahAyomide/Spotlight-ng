@@ -1,6 +1,7 @@
-/* SpotLight enquiry handler (Vercel serverless function).
+/* SpotLight enquiry handler (Netlify Function).
    Receives the "Become a Partner" and "Contact us" forms and emails them to SpotLight via Resend.
-   Settings come from Environment Variables in Vercel (never put keys in the website files):
+   The website posts to /api/enquiry; netlify.toml forwards that address to this function.
+   Settings come from Environment Variables in Netlify (never put keys in the website files):
      RESEND_API_KEY  (required)  your Resend API key
      TO_EMAIL        (optional)  where enquiries are delivered. Default: hellospotlite@gmail.com
      FROM_EMAIL      (optional)  sender. Default: SpotLight Website <onboarding@resend.dev>  */
@@ -14,33 +15,30 @@ const LABELS = { name: "Name", email: "Email", school: "School / organization", 
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const oneLine = (s) => String(s).replace(/[\r\n]+/g, " ").trim();
+const reply = (statusCode, obj, extra) => ({ statusCode, headers: { "Content-Type": "application/json", ...(extra || {}) }, body: JSON.stringify(obj) });
 
-module.exports = async function handler(req, res) {
-  if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
-    return res.status(405).json({ ok: false, error: "Method not allowed" });
-  }
+exports.handler = async (event) => {
+  if (event.httpMethod !== "POST") return reply(405, { ok: false, error: "Method not allowed" }, { Allow: "POST" });
 
-  let body = req.body;
-  if (typeof body === "string") { try { body = JSON.parse(body); } catch (e) { body = {}; } }
-  body = body || {};
+  let body = {};
+  try { body = JSON.parse(event.body || "{}") || {}; } catch (e) { body = {}; }
 
   // Spam trap: real visitors never see or fill this hidden field. Pretend success so bots move on.
-  if (body.website) return res.status(200).json({ ok: true });
+  if (body.website) return reply(200, { ok: true });
 
   const type = body.type === "partner" ? "partner" : "contact";
   const f = {};
   for (const k of Object.keys(LIMITS)) f[k] = String(body[k] == null ? "" : body[k]).trim().slice(0, LIMITS[k]);
 
   const missing = REQUIRED[type].filter((k) => !f[k]);
-  if (missing.length) return res.status(400).json({ ok: false, error: "Please fill in all required fields." });
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email)) return res.status(400).json({ ok: false, error: "Please enter a valid email address." });
-  if (body.consent !== true) return res.status(400).json({ ok: false, error: "Please tick the consent box." });
+  if (missing.length) return reply(400, { ok: false, error: "Please fill in all required fields." });
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email)) return reply(400, { ok: false, error: "Please enter a valid email address." });
+  if (body.consent !== true) return reply(400, { ok: false, error: "Please tick the consent box." });
 
   const key = process.env.RESEND_API_KEY;
   if (!key) {
     console.error("RESEND_API_KEY is not set");
-    return res.status(500).json({ ok: false, error: "Email service is not configured." });
+    return reply(500, { ok: false, error: "Email service is not configured." });
   }
 
   const fields = REQUIRED[type].filter((k) => k !== "message").concat("message");
@@ -69,11 +67,11 @@ module.exports = async function handler(req, res) {
     });
     if (!r.ok) {
       console.error("Resend error", r.status, await r.text());
-      return res.status(502).json({ ok: false, error: "Could not send the email right now." });
+      return reply(502, { ok: false, error: "Could not send the email right now." });
     }
-    return res.status(200).json({ ok: true });
+    return reply(200, { ok: true });
   } catch (e) {
     console.error("Send failed", e);
-    return res.status(502).json({ ok: false, error: "Could not send the email right now." });
+    return reply(502, { ok: false, error: "Could not send the email right now." });
   }
 };

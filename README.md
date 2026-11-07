@@ -16,8 +16,9 @@ No extension? Double-click `index.html` and it opens in your browser too.
 | `css/style.css` | All styling. Colours are at the top (`:root`). |
 | `js/articles.js` | The blog articles (sample content). Add or edit articles here. |
 | `js/gallery.js` | The gallery photos (home slider and Gallery page). Add or change photos here. |
-| `api/enquiry.js` | The server function that emails form messages to hellospotlite@gmail.com (runs on Vercel). |
-| `SETUP-EMAIL-AND-GO-LIVE.md` | Step-by-step: Resend, GitHub, Vercel. |
+| `netlify/functions/enquiry.js` | The server function that emails form messages to hellospotlite@gmail.com (runs on Netlify). |
+| `netlify.toml` | Netlify settings (where the site is, and forwarding /api/enquiry to the function). |
+| `SETUP-EMAIL-AND-GO-LIVE.md` | Step-by-step: Resend, GitHub, Netlify. |
 | `js/main.js` | Page switching, mobile menu, scrolling school names, contact form preview. |
 | `assets/` | Logos, favicon and photos. Replace photos by saving new ones with the same file names. |
 
@@ -28,7 +29,7 @@ No extension? Double-click `index.html` and it opens in your browser too.
 - **Photos:** replace files in `assets/images/`.
 
 ## Not finished yet
-- The forms email you only after the site is deployed on Vercel. See `SETUP-EMAIL-AND-GO-LIVE.md`.
+- The forms email you only after the site is deployed on Netlify. See `SETUP-EMAIL-AND-GO-LIVE.md`.
 - Blog "Read article" buttons have no article pages yet. Replace the placeholder contact details on the Contact page.
 - Footer About, Privacy and Terms links have no pages yet.
 
