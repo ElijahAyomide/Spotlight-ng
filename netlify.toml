@@ -11,3 +11,12 @@
   from = "/api/enquiry"
   to = "/.netlify/functions/enquiry"
   status = 200
+
+# Keep the admin dashboard private from search engines and never store it in caches
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "same-origin"

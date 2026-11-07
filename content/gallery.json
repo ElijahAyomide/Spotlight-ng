@@ -1,0 +1,56 @@
+[
+  {
+    "img": "assets/gallery/gal-1-spaces.jpg",
+    "title": "Hands-on learning spaces",
+    "cat": "class",
+    "cap": "Start with the learners, the space and the tools you have. Build from there."
+  },
+  {
+    "img": "assets/gallery/gal-2-prototypes.jpg",
+    "title": "Student-led prototypes",
+    "cat": "proj",
+    "cap": "A classroom activity that helps students turn a real problem into a simple app idea, one paper prototype at a time."
+  },
+  {
+    "img": "assets/gallery/gal-3-assessly.jpg",
+    "title": "Assessly in use",
+    "cat": "tools",
+    "cap": "Create tests and exams, add students by class, and see results in one place."
+  },
+  {
+    "img": "assets/gallery/gal-4-lab.jpg",
+    "title": "Ready for the next lesson",
+    "cat": "class",
+    "cap": "A shared computer lab gives every learner a place to practise, explore and build confidence."
+  },
+  {
+    "img": "assets/gallery/gal-5-code.jpg",
+    "title": "From an idea to a web page",
+    "cat": "proj",
+    "cap": "Small steps in HTML, CSS and JavaScript turn a blank screen into a working student project."
+  },
+  {
+    "img": "assets/gallery/gal-6-ai.jpg",
+    "title": "Exploring AI responsibly",
+    "cat": "tools",
+    "cap": "Ask better questions, check suggestions and use AI as a starting point for original thinking."
+  },
+  {
+    "img": "assets/gallery/gal-7-together.jpg",
+    "title": "Space to work together",
+    "cat": "class",
+    "cap": "Shared desks, simple materials and open conversation make room for collaborative learning."
+  },
+  {
+    "img": "assets/gallery/gal-8-sketch.jpg",
+    "title": "Sketch, test, improve",
+    "cat": "proj",
+    "cap": "Paper screens help learners map an app, discuss their choices and refine the next version."
+  },
+  {
+    "img": "assets/gallery/gal-1-spaces.jpg",
+    "title": "A workspace for building",
+    "cat": "tools",
+    "cap": "From planning a lesson to trying a new idea, a focused digital workspace keeps the next step within reach."
+  }
+]

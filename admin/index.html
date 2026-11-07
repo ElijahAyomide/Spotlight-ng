@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>SpotLight Admin</title>
+<link rel="icon" href="../assets/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<main id="login" class="login" hidden>
+  <div class="lcard">
+    <img src="../assets/logo.png" alt="SpotLight" width="64">
+    <h1>SpotLight Admin</h1>
+    <p class="mut">Log in to edit your website.</p>
+    <form id="lf">
+      <label>Password<input type="password" id="pw" autocomplete="current-password" required></label>
+      <button class="btn" id="lb">Log in</button>
+      <p id="le" class="err" role="alert"></p>
+    </form>
+    <a class="back" href="../">← Back to the website</a>
+  </div>
+</main>
+
+<div id="app" hidden>
+  <header class="top"><div class="wrap">
+    <img src="../assets/logo-white.png" alt="" width="34"><b>SpotLight Admin</b><span class="grow"></span>
+    <a href="../" target="_blank" rel="noopener">View live site ↗</a><button id="lo" class="ghost light">Log out</button>
+  </div></header>
+  <div class="wrap"><nav class="tabs" id="tabs">
+    <button data-t="blog" class="on">Blog posts</button><button data-t="gallery">Gallery</button><button data-t="site">Home &amp; contact details</button>
+  </nav></div>
+  <main class="wrap" id="panel"></main>
+  <div class="pub" id="pub" hidden><div class="wrap">
+    <span id="pubtxt"></span><span class="grow"></span>
+    <button class="ghost" id="discard">Discard changes</button><button class="btn" id="publish">Publish changes</button>
+  </div></div>
+</div>
+
+<div class="modal" id="modal" hidden><div class="mbox" id="mbox"></div></div>
+<div class="toast" id="toast" role="status"></div>
+<script src="../js/format.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

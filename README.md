@@ -1,40 +1,34 @@
-# SpotLight website (frontend)
+# SpotLight website
 
-Plain HTML, CSS and JavaScript. No installs or build step needed.
+Plain HTML, CSS and JavaScript (no build step), with Netlify Functions for the enquiry forms and the admin dashboard.
 
-## Run it in VS Code
-1. Unzip this folder. In VS Code: **File > Open Folder...** and choose `spotlight-website`.
-2. Open the Extensions panel (Ctrl+Shift+X, or Cmd+Shift+X on Mac), search **Live Server** (by Ritwick Dey) and install it.
-3. Right-click `index.html` and choose **Open with Live Server**. The site opens in your browser and refreshes every time you save a file.
-
-No extension? Double-click `index.html` and it opens in your browser too.
+## Run it on your computer (VS Code)
+1. In VS Code: **File > Open Folder...** and choose the `spotlight-website` folder.
+2. Install the **Live Server** extension (by Ritwick Dey), then right-click `index.html` and choose **Open with Live Server**.
+   Use Live Server (do not double-click `index.html`): the pages load their content from `content/*.json`.
+3. The enquiry forms and the admin dashboard only work on the live Netlify site, not on your computer.
 
 ## Where things are
 | File / folder | What it does |
 |---|---|
 | `index.html` | All pages: Home, Products (Assessly), Gallery, Blog, Partner, Contact. Each page is a `<section id="pg-...">`. |
 | `css/style.css` | All styling. Colours are at the top (`:root`). |
-| `js/articles.js` | The blog articles (sample content). Add or edit articles here. |
-| `js/gallery.js` | The gallery photos (home slider and Gallery page). Add or change photos here. |
-| `netlify/functions/enquiry.js` | The server function that emails form messages to hellospotlite@gmail.com (runs on Netlify). |
-| `netlify.toml` | Netlify settings (where the site is, and forwarding /api/enquiry to the function). |
-| `SETUP-EMAIL-AND-GO-LIVE.md` | Step-by-step: Resend, GitHub, Netlify. |
-| `js/main.js` | Page switching, mobile menu, scrolling school names, contact form preview. |
-| `assets/` | Logos, favicon and photos. Replace photos by saving new ones with the same file names. |
+| `content/` | **Blog posts, gallery photos and contact details** (`blog.json`, `gallery.json`, `site.json`). Edited from the admin dashboard. |
+| `admin/` | The admin dashboard: log in at `/admin` on the live site. See `ADMIN-SETUP.md`. |
+| `js/format.js`, `js/content.js`, `js/blog.js`, `js/gallery.js` | Load the content files and build the blog, article and gallery pages. |
+| `js/main.js` | Page switching, mobile menu, partner names strip, enquiry forms. |
+| `netlify/functions/enquiry.js` | Emails the Partner and Contact form messages to hellospotlite@gmail.com (via Resend). |
+| `netlify/functions/admin-*.js`, `netlify/lib/` | The dashboard's login, loading and publishing. |
+| `netlify.toml`, `robots.txt` | Netlify settings; keeps `/admin` out of search engines. |
+| `assets/` | Logos, favicon, photos. Photos uploaded from the dashboard go in `assets/uploads/`. |
+| `SETUP-EMAIL-AND-GO-LIVE.md` | Step by step: Resend, GitHub, Netlify, form emails. |
+| `ADMIN-SETUP.md` | Step by step: set up and use the admin dashboard. |
+| `.env.example` | The list of settings (environment variables) Netlify needs. Never put real values in files. |
 
-## Easy edits
-- **School names in the blue strip:** `js/main.js`, the `names` list.
-- **Assessly link:** in `index.html`, search `assessly-ng.vercel.app` to change where the "View Assessly" button goes.
-- **Contact details (email, phone, WhatsApp):** `index.html`, search `hellospotlite` and `2348145686089`.
-- **Photos:** replace files in `assets/images/`.
+## Editing the website
+- **Blog posts, gallery, contact details, partner schools:** use the admin dashboard (`/admin`). No code needed.
+- **Other wording** (Products, Partner and Contact pages, FAQs) is in `index.html`. Search for the text to find it.
+- After the dashboard publishes, your computer's copy is behind GitHub: click **Sync Changes** in VS Code before editing code.
 
-## Not finished yet
-- The forms email you only after the site is deployed on Netlify. See `SETUP-EMAIL-AND-GO-LIVE.md`.
-- Blog "Read article" buttons have no article pages yet. Replace the placeholder contact details on the Contact page.
-- Footer About, Privacy and Terms links have no pages yet.
-
-## Next steps
-Follow `SETUP-EMAIL-AND-GO-LIVE.md` to connect the forms and go live.
-
-## Changing the gallery pictures
-Save your own photos in `assets/gallery/` (JPG, about 800px wide, 16:10 shape works best), then edit the list at the top of `js/gallery.js`. The home slider shows the first 6 entries and the Gallery page shows all of them.
+## Still to do
+- Blog "Read article" works; footer About, Privacy and Terms links have no pages yet.
