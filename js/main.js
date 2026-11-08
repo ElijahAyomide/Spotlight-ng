@@ -16,9 +16,17 @@ document.querySelectorAll("[data-site]").forEach(function(el){var v=SITE[el.data
 var L={email:["mailto:"+SITE.email,SITE.email],phone:["tel:"+SITE.phoneTel,SITE.phone],wa:[SITE.whatsapp]};
 document.querySelectorAll("[data-link]").forEach(function(a){var d=L[a.dataset.link];if(d&&d[0]&&d[0]!=="mailto:undefined"&&d[0]!=="tel:undefined"){a.href=d[0];if(d[1])a.querySelector(".tx").lastChild.textContent=d[1]}});
 document.querySelectorAll("[data-assessly]").forEach(function(a){if(SITE.assessly)a.href=SITE.assessly});
-var names=(SITE.partners&&SITE.partners.length)?SITE.partners:[],half="";
-if(names.length){for(var i=0;half===""||i<Math.max(4,names.length);i++)half+='<span><img src="assets/logo-white.png" alt="">'+esc(names[i%names.length])+"</span>"}
-document.getElementById("trk").innerHTML=half+half;document.querySelector(".strip").style.display=names.length?"":"none"}
+var P=(SITE.partners||[]).map(function(p){return typeof p==="string"?{name:p,logo:""}:p}).filter(function(p){return p&&p.name}),half="";
+if(P.length){for(var i=0;half===""||i<Math.max(4,P.length);i++){var p=P[i%P.length];half+="<span>"+(p.logo?'<span class="lg"><img src="'+esc(p.logo)+'" alt=""></span>':'<img src="assets/logo-white.png" alt="">')+esc(p.name)+"</span>"}}
+document.getElementById("trk").innerHTML=half+half;document.querySelector(".strip").style.display=P.length?"":"none"}
+
+/* Wording and pictures on the Products and Partner pages (content/pages.json), and the FAQ lists (content/faqs.json) */
+function applyPages(){var t=PAGES.text||{},im=PAGES.images||{};
+document.querySelectorAll("[data-t]").forEach(function(el){var v=t[el.dataset.t];if(typeof v==="string"&&v.trim())el.textContent=v});
+document.querySelectorAll("[data-img]").forEach(function(el){var o=im[el.dataset.img];if(o&&o.img){el.src=o.img;if(typeof o.alt==="string")el.alt=o.alt}})}
+function renderFaqs(){document.querySelectorAll("[data-faq]").forEach(function(el){var l=FAQS[el.dataset.faq]||[];
+el.innerHTML=l.map(function(f){return"<details open><summary>"+esc(f.q)+'</summary><p style="color:var(--mut)">'+esc(f.a)+"</p></details>"}).join("");
+var s=el.closest(".faq");if(s)s.style.display=l.length?"":"none"})}
 
 /* Enquiry forms: send to /api/enquiry (netlify/functions/enquiry.js), which emails SpotLight */
 document.querySelectorAll("form.enq").forEach(function(f){f.onsubmit=function(e){e.preventDefault();
@@ -33,4 +41,4 @@ fetch("/api/enquiry",{method:"POST",headers:{"Content-Type":"application/json"},
 
 /* Start: show the page straight away, then fill in the content and show it again */
 if(location.hash.indexOf("#post-")!==0)route();
-CONTENT_READY.then(function(c){SITE=c.site;BLOG=c.blog;GALLERY=c.gallery;applySite();buildBlog();initGallery();route()});
+CONTENT_READY.then(function(c){SITE=c.site;BLOG=c.blog;GALLERY=c.gallery;PAGES=c.pages;FAQS=c.faqs;applySite();applyPages();renderFaqs();buildBlog();initGallery();route()});

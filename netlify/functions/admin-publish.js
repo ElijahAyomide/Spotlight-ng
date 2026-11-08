@@ -4,7 +4,7 @@ const { isAdmin, csrfOk, json } = require("../lib/session");
 const { commitFiles } = require("../lib/github");
 const V = require("../lib/validate");
 
-const CONTENT = { "content/site.json": V.validateSite, "content/blog.json": V.validateBlog, "content/gallery.json": V.validateGallery };
+const CONTENT = { "content/site.json": V.validateSite, "content/blog.json": V.validateBlog, "content/gallery.json": V.validateGallery, "content/pages.json": V.validatePages, "content/faqs.json": V.validateFaqs };
 const UPLOAD = /^assets\/uploads\/[a-z0-9][a-z0-9._-]{0,80}\.(jpg|jpeg|png|webp)$/;
 const MAX_BODY = 5.5 * 1024 * 1024, MAX_IMAGE = 1.5 * 1024 * 1024;
 

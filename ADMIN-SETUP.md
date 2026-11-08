@@ -68,8 +68,18 @@ Open `https://your-site.netlify.app/admin`, type your `ADMIN_PASSWORD`, and you 
 - **+ Add photo:** upload, add a title, category (Classrooms, Projects or Tools) and a caption.
 - The **first 6 photos** appear in the slider on the home page. Use the **← →** buttons to reorder. All photos appear on the Gallery page.
 
+**Products & Partner pages tab**
+- Choose **Products page** or **Partner page**. Every heading, paragraph, button, link and picture on that page is listed in sections, in the order they appear.
+- Type over any wording to change it. Next to a changed item, **Reset to original** puts the original back. If you clear a box completely, the original is used.
+- **Pictures:** press **Upload a new picture** (or **Choose one already on the site**) and describe the picture in a few words (this helps people who cannot see it, and search engines).
+- The page layout, the buttons' destinations and the enquiry form stay the same. Only the wording and pictures change.
+
+**FAQs tab**
+- Choose the page (**Home, Products, Partner or Contact**) and add, edit, reorder or delete its questions. If a page has no questions, its FAQ section is hidden on the website.
+
 **Home & contact details tab**
-- Edit the home headline and intro, footer text, email, phone, WhatsApp link, Assessly link and the partner school names.
+- Edit the home headline and intro, footer text, email, phone, WhatsApp link and Assessly link.
+- **Partner schools:** each school has a name and an optional **logo**. Upload a logo (a square or round-friendly PNG or JPG works best; PNG keeps a see-through background). Logos appear in a white circle in the scrolling strip on the home page. Without a logo, the SpotLight icon is shown. Use ↑ ↓ to change the order.
 
 **Publishing**
 - A bar at the bottom says "Unpublished changes". Press **Publish changes** when you are ready, or **Discard changes** to start again.
@@ -84,7 +94,8 @@ Landscape photos (wider than tall) look best. Up to about 6 to 8 new photos fit 
 - **One shared password.** Anyone with it can edit the site. To change it: change `ADMIN_PASSWORD` in Netlify and redeploy.
   If you ever need separate logins for several people, ask and it can be added.
 - **Deleted photos** are removed from the pages but the picture files stay in the repository (harmless; keeps history safe).
-- **Not editable here yet:** the wording on the Products, Partner and Contact pages and the FAQs. Ask and they can be added to the dashboard.
+- **Not editable here yet:** the wording on the Home, Gallery and Contact pages (apart from their FAQs and contact details), the blog page headings, and the enquiry form labels. Ask and they can be added.
+- **If the page layout is ever redesigned** (for example new sections are added to the Products or Partner page), the list in the "Products & Partner pages" tab needs refreshing. Ask and it will be regenerated.
 
 ## Security
 - Only you can publish: every save needs the login cookie, which lasts 8 hours and cannot be read by other websites.
@@ -103,3 +114,15 @@ Landscape photos (wider than tall) look best. Up to about 6 to 8 new photos fit 
 | Published, but the live site still looks old | Wait 1 to 2 minutes, then refresh (Ctrl+Shift+R). Check Netlify > Deploys shows a new deploy. |
 | A new photo looks missing on the live site | Same: wait for the Netlify deploy to finish. |
 | Dashboard shows a blank white page | Make sure you opened `/admin` on the live Netlify address, not from VS Code. The dashboard only works online. |
+
+---
+## Updating a dashboard you already set up (adding Pages, FAQs and partner logos)
+Use `spotlight-pages-update.zip`. It is safe to use after you have published from the dashboard, because it does **not** contain your
+blog, gallery or contact content.
+1. Unzip it. In VS Code, **Sync Changes / run `git pull` first**, so your computer has the latest version from GitHub.
+2. Drag these into VS Code's left sidebar and choose **Replace**: `admin`, `js`, `css`, `netlify`, `index.html`, `content`, `README.md`, `ADMIN-SETUP.md`.
+   (The `content` folder in this zip only has the new files `pages.json`, `faqs.json` and `pages-schema.json`; nothing of yours is overwritten.)
+3. If you had changed `index.html` yourself (for example the page title in the browser tab), re-apply that change: search for `<title>` and edit it.
+4. Click Source Control (Ctrl+Shift+G), type `Add page and FAQ editing`, **Commit**, then **Sync Changes** (or in the terminal: `git add .`, `git commit -m "Add page and FAQ editing"`, `git push`).
+5. When Netlify finishes deploying, open `/admin`: you will see the new tabs **Products & Partner pages** and **FAQs**.
+No new Netlify settings are needed.

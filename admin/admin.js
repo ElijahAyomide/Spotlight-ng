@@ -3,8 +3,10 @@
 (function () {
 "use strict";
 const $ = (s) => document.querySelector(s), FN = "/.netlify/functions/";
-const S = { site: {}, blog: [], gallery: [], pending: {}, shown: {}, dirty: { blog: 0, gallery: 0, site: 0 }, tab: "blog" };
-const LABEL = { blog: "Blog posts", gallery: "Gallery", site: "Home & contact details" };
+const dz = () => ({ blog: 0, gallery: 0, site: 0, pages: 0, faqs: 0 });
+const S = { site: {}, blog: [], gallery: [], pages: { text: {}, images: {} }, faqs: { home: [], products: [], partner: [], contact: [] }, schema: null, pending: {}, shown: {}, dirty: dz(), tab: "blog", ptab: "products", ftab: "home" };
+const FPAGES = { home: "Home page", products: "Products page", partner: "Partner page", contact: "Contact page" };
+const LABEL = { blog: "Blog posts", gallery: "Gallery", site: "Home & contact details", pages: "Products & Partner pages", faqs: "FAQs" };
 
 /* ---------- helpers ---------- */
 async function api(name, method, body) {
@@ -21,31 +23,37 @@ const imgSrc = (p) => S.shown[p] || "../" + p;
 const total = () => Object.values(S.dirty).reduce((a, b) => a + b, 0);
 const move = (arr, i, d, key) => { const j = i + d; if (j < 0 || j >= arr.length) return; [arr[i], arr[j]] = [arr[j], arr[i]]; S.dirty[key]++; render(); };
 
-function shrink(file) {
+function shrink(file, opt) {
+  opt = opt || {};
   return new Promise((res, rej) => {
-    if (!/^image\//.test(file.type)) return rej(new Error("Please choose a photo (JPG, PNG or WebP)."));
-    if (file.size > 25 * 1024 * 1024) return rej(new Error("That photo is very large (over 25 MB). Try a smaller one."));
+    if (!/^image\//.test(file.type)) return rej(new Error("Please choose a picture (JPG, PNG or WebP)."));
+    if (file.size > 25 * 1024 * 1024) return rej(new Error("That picture is very large (over 25 MB). Try a smaller one."));
     const im = new Image(), u = URL.createObjectURL(file);
     im.onload = () => {
-      const r = Math.min(1, 1400 / im.width), c = document.createElement("canvas");
-      c.width = Math.round(im.width * r); c.height = Math.round(im.height * r);
-      const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
       URL.revokeObjectURL(u);
-      let q = 0.84, d = c.toDataURL("image/jpeg", q);
+      const draw = (max) => { const r = Math.min(1, max / im.width), c = document.createElement("canvas"); c.width = Math.max(1, Math.round(im.width * r)); c.height = Math.max(1, Math.round(im.height * r));
+        const x = c.getContext("2d"); if (!opt.png) { x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); } x.drawImage(im, 0, 0, c.width, c.height); return c; };
+      if (opt.png) { let max = opt.max || 400, d; do { d = draw(max).toDataURL("image/png"); max = Math.round(max * 0.75); } while (d.length > 650000 && max > 80); return res(d); }
+      const c = draw(opt.max || 1400); let q = 0.84, d = c.toDataURL("image/jpeg", q);
       while (d.length > 900000 && q > 0.4) { q -= 0.1; d = c.toDataURL("image/jpeg", q); }
       res(d);
     };
-    im.onerror = () => rej(new Error("Could not read that photo. Try a JPG or PNG."));
+    im.onerror = () => rej(new Error("Could not read that picture. Try a JPG or PNG."));
     im.src = u;
   });
 }
-const allImages = () => [...new Set([...S.blog.map((p) => p.img), ...S.gallery.map((g) => g.img), ...Object.keys(S.pending)])].filter(Boolean);
+const schemaImgs = () => (S.schema ? S.schema.pages.flatMap((p) => p.groups.flatMap((g) => g.fields.filter((f) => f.type === "image").map((f) => f.def))) : []);
+const allImages = () => [...new Set([...S.blog.map((p) => p.img), ...S.gallery.map((g) => g.img), ...Object.values(S.pages.images).map((o) => o.img), ...schemaImgs(), ...Object.keys(S.pending)])].filter((p) => p && !/\/logo-[^/]*$/.test(p));
 
 /* ---------- login / load ---------- */
 function showLogin() { $("#app").hidden = true; closeModal(); $("#login").hidden = false; $("#pw").value = ""; $("#pw").focus(); }
 async function load() {
   const j = await api("admin-content");
-  S.site = j.site; S.blog = j.blog; S.gallery = j.gallery; S.pending = {}; S.dirty = { blog: 0, gallery: 0, site: 0 };
+  S.site = j.site; S.blog = j.blog; S.gallery = j.gallery; S.pending = {}; S.dirty = dz();
+  S.pages = j.pages || {}; S.pages.text = S.pages.text || {}; S.pages.images = S.pages.images || {};
+  S.faqs = Object.assign({ home: [], products: [], partner: [], contact: [] }, j.faqs || {});
+  S.site.partners = (S.site.partners || []).map((p) => (typeof p === "string" ? { name: p, logo: "" } : p));
+  if (!S.schema) { try { S.schema = await (await fetch("../content/pages-schema.json")).json(); } catch (e) { S.schema = { pages: [] }; } }
   $("#login").hidden = true; $("#app").hidden = false; render();
 }
 $("#lf").onsubmit = async (e) => {
@@ -53,15 +61,18 @@ $("#lf").onsubmit = async (e) => {
   try { await api("admin-auth", "POST", { password: $("#pw").value }); await load(); } catch (err) { $("#le").textContent = err.message; }
   b.disabled = false;
 };
-$("#lo").onclick = async () => { if (total() && !confirm("You have unpublished changes. Log out and lose them?")) return; try { await api("admin-auth", "DELETE"); } catch (e) {} S.dirty = { blog: 0, gallery: 0, site: 0 }; showLogin(); };
+$("#lo").onclick = async () => { if (total() && !confirm("You have unpublished changes. Log out and lose them?")) return; try { await api("admin-auth", "DELETE"); } catch (e) {} S.dirty = dz(); showLogin(); };
 window.addEventListener("beforeunload", (e) => { if (total()) { e.preventDefault(); e.returnValue = ""; } });
 
 /* ---------- rendering ---------- */
-function render() {
-  document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.t === S.tab));
-  $("#panel").innerHTML = S.tab === "blog" ? rBlog() : S.tab === "gallery" ? rGallery() : rSite();
+function updatePub() {
   const n = Object.keys(S.dirty).filter((k) => S.dirty[k]);
   $("#pub").hidden = !n.length; $("#pubtxt").textContent = "Unpublished changes: " + n.map((k) => LABEL[k]).join(", ");
+}
+function render() {
+  document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.t === S.tab));
+  $("#panel").innerHTML = { blog: rBlog, gallery: rGallery, pages: rPages, faqs: rFaqs, site: rSite }[S.tab]();
+  updatePub();
   if (S.tab === "site") wireSite();
 }
 $("#tabs").onclick = (e) => { const b = e.target.closest("button"); if (b) { S.tab = b.dataset.t; render(); } };
@@ -83,26 +94,117 @@ function rSite() {
   <div class="panelbox"><h3>Contact details</h3><div class="two">${f("email", "Email address", s.email, 'type="email" required')}${f("phone", "Phone number (as people read it)", s.phone, "required")}</div>
   <div class="two">${f("phoneTel", "Phone number for calling <small>(digits only, like +2348012345678)</small>", s.phoneTel, "required")}${f("whatsapp", "WhatsApp link <small>(https://wa.me/2348012345678)</small>", s.whatsapp, "required")}</div></div>
   <div class="panelbox"><h3>Links</h3>${f("assessly", "Assessly web app link", s.assessly, 'type="url" required')}</div>
-  <div class="panelbox"><h3>Partner schools <small class="mut">(scrolling names on the home page)</small></h3><div id="plist"></div><button type="button" class="ghost sm" id="addp" style="margin-top:12px">+ Add a school</button></div>
+  <div class="panelbox"><h3>Partner schools <small class="mut">(names and logos in the scrolling strip on the home page)</small></h3><div id="plist"></div><button type="button" class="ghost sm" id="addp" style="margin-top:12px">+ Add a school</button></div>
   <p class="err" id="se"></p><button class="btn">Save these details</button> <span class="mut" style="font-size:.8rem">Saves to your draft. Press “Publish changes” to put it on the live site.</span></form>`;
 }
 function wireSite() {
-  const pl = $("#plist"), row = (v) => { const d = document.createElement("div"); d.className = "prow"; d.innerHTML = `<input value="${esc(v)}" maxlength="80" aria-label="School name"><button type="button" class="ghost sm dng">Remove</button>`; d.querySelector("button").onclick = () => d.remove(); pl.appendChild(d); };
-  (S.site.partners || []).forEach(row); $("#addp").onclick = () => { row(""); pl.lastChild.querySelector("input").focus(); };
+  const pl = $("#plist"); let ps = (S.site.partners || []).map((p) => ({ name: p.name, logo: p.logo || "" }));
+  const sync = () => pl.querySelectorAll(".prow2").forEach((r, i) => { if (ps[i]) ps[i].name = r.querySelector("input[type=text]").value; });
+  const draw = () => {
+    pl.innerHTML = ps.map((p, i) => `<div class="prow2"><div class="plg">${p.logo ? `<img src="${esc(imgSrc(p.logo))}" alt="">` : "<span>No logo</span>"}</div><input type="text" value="${esc(p.name)}" maxlength="80" aria-label="School name" placeholder="School name">
+      <div class="ra"><input type="file" accept="image/*" hidden data-lf="${i}"><button type="button" class="ghost sm" data-pa="logo" data-i="${i}">${p.logo ? "Change logo" : "Upload logo"}</button>${p.logo ? `<button type="button" class="ghost sm" data-pa="nologo" data-i="${i}">Remove logo</button>` : ""}<button type="button" class="ghost sm" data-pa="up" data-i="${i}" aria-label="Move up">↑</button><button type="button" class="ghost sm" data-pa="down" data-i="${i}" aria-label="Move down">↓</button><button type="button" class="ghost sm dng" data-pa="del" data-i="${i}">Remove school</button></div></div>`).join("") || '<p class="mut">No schools yet. The scrolling strip is hidden on the home page until you add one.</p>';
+  };
+  draw();
+  pl.onclick = (e) => {
+    const b = e.target.closest("[data-pa]"); if (!b) return; sync(); const i = +b.dataset.i, k = b.dataset.pa;
+    if (k === "logo") return pl.querySelector(`[data-lf="${i}"]`).click();
+    if (k === "nologo") ps[i].logo = ""; if (k === "del") ps.splice(i, 1);
+    if (k === "up" && i > 0) [ps[i - 1], ps[i]] = [ps[i], ps[i - 1]]; if (k === "down" && i < ps.length - 1) [ps[i + 1], ps[i]] = [ps[i], ps[i + 1]];
+    draw();
+  };
+  pl.onchange = async (e) => {
+    const f = e.target.files && e.target.files[0]; if (!f || e.target.dataset.lf == null) return; sync(); const i = +e.target.dataset.lf;
+    try { const d = await shrink(f, { max: 400, png: true }), p = "assets/uploads/logo-" + (slugify(ps[i].name, 30) || "school") + "-" + Date.now().toString(36) + ".png"; S.pending[p] = d; S.shown[p] = d; ps[i].logo = p; draw(); }
+    catch (err) { toast(err.message, "err"); }
+  };
+  $("#addp").onclick = () => { sync(); ps.push({ name: "", logo: "" }); draw(); const all = pl.querySelectorAll("input[type=text]"); all[all.length - 1].focus(); };
   $("#sf").onsubmit = (e) => {
-    e.preventDefault(); const v = (id) => $("#s-" + id).value.trim();
+    e.preventDefault(); sync(); const v = (id) => $("#s-" + id).value.trim();
     if (!/^https:\/\/wa\.me\/\d{7,15}/.test(v("whatsapp"))) return ($("#se").textContent = "The WhatsApp link must look like https://wa.me/2348012345678");
     if (!/^\+?\d{7,15}$/.test(v("phoneTel"))) return ($("#se").textContent = "The calling number must be digits only, like +2348012345678");
     if (!/^https:\/\//.test(v("assessly"))) return ($("#se").textContent = "The Assessly link must start with https://");
     S.site = { heroTitle: v("heroTitle"), heroText: v("heroText"), footerText: v("footerText"), email: v("email"), phone: v("phone"), phoneTel: v("phoneTel"), whatsapp: v("whatsapp"), assessly: v("assessly"),
-      partners: [...pl.querySelectorAll("input")].map((i) => i.value.trim()).filter(Boolean) };
+      partners: ps.map((p) => ({ name: p.name.trim(), logo: p.logo })).filter((p) => p.name) };
     S.dirty.site++; render(); toast("Saved to your draft. Press “Publish changes” when you are ready.", "ok");
   };
 }
 
+/* ---------- Products & Partner pages: wording and pictures ---------- */
+const fdef = (key) => { for (const p of S.schema.pages) for (const g of p.groups) for (const f of g.fields) if (f.key === key) return f; };
+const curText = (f) => (S.pages.text[f.key] !== undefined ? S.pages.text[f.key] : f.def);
+const curImg = (f) => S.pages.images[f.key] || { img: f.def, alt: f.alt };
+const imgDefault = (f, c) => c.img === f.def && c.alt === f.alt;
+function fieldHtml(f) {
+  if (f.type === "image") {
+    const c = curImg(f);
+    return `<div class="fld"><label>${esc(f.label)} <button type="button" class="lnk" data-reset="${f.key}" ${imgDefault(f, c) ? "hidden" : ""}>Reset to original</button></label><div class="pk"><img class="ipv" data-pv="${f.key}" src="${esc(imgSrc(c.img))}" alt=""><div>
+      <input type="file" accept="image/*" hidden data-fi="${f.key}"><button type="button" class="ghost sm" data-upimg="${f.key}">Upload a new picture</button> <button type="button" class="ghost sm" data-libimg="${f.key}">Choose one already on the site</button>
+      <label class="altl">Picture description <small>(for visitors who cannot see it)</small><input type="text" data-alt="${f.key}" value="${esc(c.alt)}" maxlength="200"></label></div></div><div class="lib" data-lib="${f.key}" hidden></div></div>`;
+  }
+  const v = curText(f), attr = `data-key="${f.key}" maxlength="1500"`;
+  return `<div class="fld"><label>${esc(f.label)} <button type="button" class="lnk" data-reset="${f.key}" ${v === f.def ? "hidden" : ""}>Reset to original</button></label>${f.type === "area" ? `<textarea ${attr} rows="3">${esc(v)}</textarea>` : `<input type="text" ${attr} value="${esc(v)}">`}</div>`;
+}
+function rPages() {
+  const pg = S.schema.pages.find((p) => p.id === S.ptab) || S.schema.pages[0];
+  return `<div class="bar"><div><h2>Products &amp; Partner pages</h2><p class="mut">Change the wording and pictures on these two pages. The layout stays the same. Anything you do not change keeps its original wording; clear a box and it goes back to the original.</p></div></div>
+  <div class="seg">${S.schema.pages.map((p) => `<button data-pt="${p.id}" class="${p.id === pg.id ? "on" : ""}">${esc(p.title)}</button>`).join("")}</div>` +
+    pg.groups.map((g, i) => `<details class="grp" ${i === 0 ? "open" : ""}><summary>${esc(g.title)} <small class="mut">(${g.fields.length} items)</small></summary>${g.fields.map(fieldHtml).join("")}</details>`).join("");
+}
+function setImage(key, path, alt) {
+  const f = fdef(key), c = { img: path || curImg(f).img, alt: alt != null ? alt : curImg(f).alt };
+  if (imgDefault(f, c)) delete S.pages.images[key]; else S.pages.images[key] = c;
+  S.dirty.pages = 1; updatePub();
+  const box = $(`[data-pv="${key}"]`).closest(".fld"); $(`[data-pv="${key}"]`).src = imgSrc(c.img); box.querySelector("[data-alt]").value = c.alt; box.querySelector("[data-reset]").hidden = imgDefault(f, c);
+}
+function resetField(key) {
+  const f = fdef(key); if (!f) return;
+  if (f.type === "image") { delete S.pages.images[key]; setImage(key, f.def, f.alt); delete S.pages.images[key]; }
+  else { delete S.pages.text[key]; const el = $(`[data-key="${key}"]`); el.value = f.def; el.closest(".fld").querySelector("[data-reset]").hidden = true; }
+  S.dirty.pages = 1; updatePub();
+}
+$("#panel").addEventListener("input", (e) => {
+  const t = e.target;
+  if (t.dataset.key) {
+    const f = fdef(t.dataset.key), val = t.value;
+    if (!val.trim() || val === f.def) delete S.pages.text[f.key]; else S.pages.text[f.key] = val;
+    t.closest(".fld").querySelector("[data-reset]").hidden = !S.pages.text[f.key]; S.dirty.pages = 1; updatePub();
+  } else if (t.dataset.alt) setImage(t.dataset.alt, null, t.value);
+});
+$("#panel").addEventListener("change", async (e) => {
+  const t = e.target; if (!t.dataset.fi || !t.files[0]) return;
+  try { const d = await shrink(t.files[0]), p = "assets/uploads/" + slugify(t.dataset.fi.replace(".", "-"), 30) + "-" + Date.now().toString(36) + ".jpg"; S.pending[p] = d; S.shown[p] = d; setImage(t.dataset.fi, p); }
+  catch (err) { toast(err.message, "err"); }
+  t.value = "";
+});
+
+/* ---------- FAQs ---------- */
+function rFaqs() {
+  const l = S.faqs[S.ftab] || [];
+  return `<div class="bar"><div><h2>FAQs</h2><p class="mut">The questions and answers shown on each page. Choose a page, then add, edit, reorder or delete questions.</p></div><button class="btn" data-a="new-faq">+ New question</button></div>
+  <div class="seg">${Object.keys(FPAGES).map((k) => `<button data-ft="${k}" class="${k === S.ftab ? "on" : ""}">${FPAGES[k]}</button>`).join("")}</div>` +
+    (l.map((f, i) => `<div class="row"><div class="rt"><b>${esc(f.q)}</b><small>${esc(f.a.length > 150 ? f.a.slice(0, 150) + "…" : f.a)}</small></div><div class="ra"><button class="ghost sm" data-a="edit-faq" data-i="${i}">Edit</button><button class="ghost sm" data-a="up-faq" data-i="${i}" aria-label="Move up">↑</button><button class="ghost sm" data-a="down-faq" data-i="${i}" aria-label="Move down">↓</button><button class="ghost sm dng" data-a="del-faq" data-i="${i}">Delete</button></div></div>`).join("") ||
+      '<div class="empty">No questions on this page yet. The FAQ section is hidden on the website until you add one.</div>');
+}
+function editFaq(i) {
+  const l = S.faqs[S.ftab], f = i >= 0 ? l[i] : { q: "", a: "" }, isNew = i < 0;
+  modal(`<h3>${isNew ? "New question" : "Edit question"} <small class="mut">(${FPAGES[S.ftab]})</small></h3><form id="pform"><label>Question<input id="q-q" value="${esc(f.q)}" maxlength="200" required></label>
+  <label>Answer<textarea id="q-a" rows="5" maxlength="1500" required>${esc(f.a)}</textarea></label><div class="acts"><button type="button" class="ghost" data-x="cancel">Cancel</button><button class="btn">${isNew ? "Add question" : "Save changes"}</button></div></form>`);
+  $("#pform").onsubmit = (e) => { e.preventDefault(); const q = $("#q-q").value.trim(), an = $("#q-a").value.trim(); if (!q || !an) return;
+    if (isNew) l.push({ q, a: an }); else l[i] = { q, a: an }; S.dirty.faqs++; closeModal(); render(); toast(isNew ? "Question added to your draft." : "Changes saved to your draft.", "ok"); };
+}
+
 /* ---------- panel buttons ---------- */
 $("#panel").onclick = (e) => {
+  const sg = e.target.closest("[data-pt],[data-ft]"); if (sg) { if (sg.dataset.pt) S.ptab = sg.dataset.pt; else S.ftab = sg.dataset.ft; return render(); }
+  const rs = e.target.closest("[data-reset]"); if (rs) return resetField(rs.dataset.reset);
+  const ui = e.target.closest("[data-upimg]"); if (ui) return $(`[data-fi="${ui.dataset.upimg}"]`).click();
+  const lb = e.target.closest("[data-libimg]");
+  if (lb) { const box = $(`[data-lib="${lb.dataset.libimg}"]`); box.hidden = !box.hidden; if (!box.hidden) box.innerHTML = allImages().map((p) => `<img src="${esc(imgSrc(p))}" data-p="${esc(p)}" data-k="${lb.dataset.libimg}" alt="">`).join(""); return; }
+  const lt = e.target.closest("[data-lib] img"); if (lt) { lt.closest(".lib").hidden = true; return setImage(lt.dataset.k, lt.dataset.p); }
   const b = e.target.closest("[data-a]"); if (!b) return; const a = b.dataset.a, i = +b.dataset.i;
+  if (a === "new-faq") return editFaq(-1); if (a === "edit-faq") return editFaq(i);
+  if (a === "up-faq") return move(S.faqs[S.ftab], i, -1, "faqs"); if (a === "down-faq") return move(S.faqs[S.ftab], i, 1, "faqs");
+  if (a === "del-faq") { if (confirm(`Delete this question?\n\n“${S.faqs[S.ftab][i].q}”`)) { S.faqs[S.ftab].splice(i, 1); S.dirty.faqs++; render(); } return; }
   if (a === "new-post") return editPost(-1); if (a === "edit-post") return editPost(i);
   if (a === "up-post") return move(S.blog, i, -1, "blog"); if (a === "down-post") return move(S.blog, i, 1, "blog");
   if (a === "del-post") { if (confirm(`Delete “${S.blog[i].title}”?\n\nIt is removed from the live site when you publish.`)) { S.blog.splice(i, 1); S.dirty.blog++; render(); } return; }
@@ -192,11 +294,11 @@ function editPhoto(i) {
 $("#publish").onclick = async () => {
   const keys = Object.keys(S.dirty).filter((k) => S.dirty[k]); if (!keys.length) return;
   const files = keys.map((k) => ({ path: `content/${k}.json`, content: JSON.stringify(S[k]) }));
-  const used = new Set([...S.blog, ...S.gallery].map((x) => x.img));
+  const used = new Set([...S.blog, ...S.gallery].map((x) => x.img).concat(Object.values(S.pages.images).map((o) => o.img), (S.site.partners || []).map((p) => p.logo)));
   Object.keys(S.pending).filter((p) => used.has(p)).forEach((p) => files.push({ path: p, base64: S.pending[p] }));
   if (JSON.stringify(files).length > 5.2e6) return toast("There are too many new photos for one publish. Publish now, then add the rest afterwards.", "err");
   const b = $("#publish"); b.disabled = true; b.textContent = "Publishing…";
-  try { await api("admin-publish", "POST", { files }); S.pending = {}; S.dirty = { blog: 0, gallery: 0, site: 0 }; render(); toast("Published! Your live site will update in about a minute.", "ok"); }
+  try { await api("admin-publish", "POST", { files }); S.pending = {}; S.dirty = dz(); render(); toast("Published! Your live site will update in about a minute.", "ok"); }
   catch (err) { toast(err.message, "err"); }
   b.disabled = false; b.textContent = "Publish changes";
 };

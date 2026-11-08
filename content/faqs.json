@@ -1,0 +1,70 @@
+{
+  "home": [
+    {
+      "q": "Do you work with primary and secondary schools?",
+      "a": "Yes. Lessons can be adapted to different age groups, so students build practical digital skills at an appropriate pace."
+    },
+    {
+      "q": "What will our students learn?",
+      "a": "Students explore product design (UI/UX), web development with HTML, CSS and JavaScript, and how to prompt AI tools responsibly to help plan and build."
+    },
+    {
+      "q": "What does Assessly help our school manage?",
+      "a": "Student and class records, question banks, tests, exams and results are brought into a shared assessment workflow."
+    },
+    {
+      "q": "How can our school become a partner?",
+      "a": "Enquire with your school name, your role and a short outline of your current process. We can discuss a suitable next step."
+    }
+  ],
+  "products": [
+    {
+      "q": "Is Assessly a learning course?",
+      "a": "No. Assessly is our school assessment tool. Our hands-on digital skills classes are a separate part of SpotLight."
+    },
+    {
+      "q": "What can our school manage with Assessly?",
+      "a": "Student and class records, question banks, tests, exams and results are brought into a shared assessment workflow."
+    },
+    {
+      "q": "Can we discuss our school’s assessment needs first?",
+      "a": "Yes. Use the enquiry form to describe your school and the assessment tasks you want to organise. Avoid sharing student records in your message."
+    },
+    {
+      "q": "Where should we start?",
+      "a": "Enquire about Assessly with your school name, your role and a short outline of your current process. We can discuss a suitable next step."
+    }
+  ],
+  "partner": [
+    {
+      "q": "Do we need an existing coding programme?",
+      "a": "No existing programme is needed to begin a conversation. Tell us what your school already offers and what your students are ready to explore."
+    },
+    {
+      "q": "Can a pathway suit different age groups?",
+      "a": "Yes. Project scope, pace and activities can be discussed around primary or secondary learners and their current experience."
+    },
+    {
+      "q": "What equipment should we prepare?",
+      "a": "Share the devices, connectivity and teaching space you have. We will discuss practical requirements before a starting plan is agreed."
+    },
+    {
+      "q": "Can we ask about Assessly as well?",
+      "a": "Yes. Mention Assessly in your enquiry if you also want to discuss students, classes, question banks, exams and results."
+    }
+  ],
+  "contact": [
+    {
+      "q": "I want to discuss a school partnership. Which form should I use?",
+      "a": "You can choose School partnership above, or use the dedicated school enquiry form on Become a Partner for more detail about learners and pathways."
+    },
+    {
+      "q": "Can I ask about Assessly here?",
+      "a": "Yes. Choose Assessly as your enquiry type and describe your question about students, classes, question banks, tests, exams or results."
+    },
+    {
+      "q": "Should I include student information?",
+      "a": "No. Keep your message general. Please do not include student names, records, passwords or other sensitive information."
+    }
+  ]
+}

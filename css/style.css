@@ -244,3 +244,7 @@ header.top nav{top:64px;background:var(--blue2);padding:8px 10px 20px;gap:0}head
 .enq .hp{position:absolute!important;left:-9999px;width:1px!important;height:1px;opacity:0;pointer-events:none}
 .fm.err{color:#C0392B}
 .enq button:disabled{opacity:.6;cursor:wait}
+
+/* ---- v10: partner school logos in the home strip ---- */
+.track .lg{width:46px;height:46px;border-radius:50%;background:#fff;display:grid;place-items:center;overflow:hidden;flex:none}
+.track .lg img{width:100%;height:100%;object-fit:contain;padding:6px}

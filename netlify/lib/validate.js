@@ -53,12 +53,49 @@ function validateSite(s) {
   if (!/^https:\/\/wa\.me\/\d{7,15}(\?[^\s]*)?$/.test(o.whatsapp)) return bad("The WhatsApp link must look like https://wa.me/2348012345678.");
   if (!/^https:\/\/[^\s<>"']+$/.test(o.assessly)) return bad("The Assessly link must start with https://");
   if (!Array.isArray(s.partners) || s.partners.length > 30) return bad("Partner school list is not valid.");
-  o.partners = s.partners.map((x) => clean(x, 80)).filter(Boolean);
+  o.partners = [];
+  for (const x of s.partners) {
+    const name = clean(typeof x === "string" ? x : x && x.name, 80);
+    const logo = x && typeof x === "object" ? clean(x.logo, 160) : "";
+    if (!name) continue;
+    if (logo && !IMG.test(logo)) return bad(`The logo for "${name}" is not valid.`);
+    o.partners.push({ name, logo });
+  }
   return { ok: true, value: o };
+}
+/* Wording and pictures on the Products and Partner pages: { text: {key: "..."}, images: {key: {img, alt}} } */
+function validatePages(p) {
+  if (!p || typeof p !== "object" || Array.isArray(p)) return bad("Page content is not valid.");
+  const text = {}, images = {}, T = /^(products|partner)\.t\d{2}$/, I = /^(products|partner)\.i\d{2}$/;
+  const tk = Object.entries(p.text || {}), ik = Object.entries(p.images || {});
+  if (tk.length > 400 || ik.length > 100) return bad("Page content is not valid.");
+  for (const [k, val] of tk) { if (!T.test(k)) return bad("Page content contains an unknown item."); const s = clean(val, 1500, true); if (s) text[k] = s; }
+  for (const [k, val] of ik) {
+    if (!I.test(k) || !val || typeof val !== "object") return bad("Page content contains an unknown picture.");
+    const img = clean(val.img, 160); if (!IMG.test(img)) return bad("A page picture is not valid.");
+    images[k] = { img, alt: clean(val.alt, 200) };
+  }
+  return { ok: true, value: { text, images } };
+}
+/* FAQs for each page: { home: [{q, a}], products: [...], partner: [...], contact: [...] } */
+function validateFaqs(f) {
+  if (!f || typeof f !== "object" || Array.isArray(f)) return bad("FAQ data is not valid.");
+  const out = {};
+  for (const k of ["home", "products", "partner", "contact"]) {
+    const arr = f[k] == null ? [] : f[k];
+    if (!Array.isArray(arr) || arr.length > 40) return bad("FAQ data is not valid.");
+    out[k] = [];
+    for (const x of arr) {
+      const q = clean(x && x.q, 200), a = clean(x && x.a, 1500, true);
+      if (!q || !a) return bad("Every FAQ needs both a question and an answer.");
+      out[k].push({ q, a });
+    }
+  }
+  return { ok: true, value: out };
 }
 const isJpeg = (b) => b.length > 3 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff;
 const isPng = (b) => b.length > 8 && b.slice(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
 const isWebp = (b) => b.length > 12 && b.slice(0, 4).toString() === "RIFF" && b.slice(8, 12).toString() === "WEBP";
 const isImage = (b) => isJpeg(b) || isPng(b) || isWebp(b);
 
-module.exports = { validateBlog, validateGallery, validateSite, isImage };
+module.exports = { validateBlog, validateGallery, validateSite, validatePages, validateFaqs, isImage };

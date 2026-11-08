@@ -13,7 +13,7 @@ Plain HTML, CSS and JavaScript (no build step), with Netlify Functions for the e
 |---|---|
 | `index.html` | All pages: Home, Products (Assessly), Gallery, Blog, Partner, Contact. Each page is a `<section id="pg-...">`. |
 | `css/style.css` | All styling. Colours are at the top (`:root`). |
-| `content/` | **Blog posts, gallery photos and contact details** (`blog.json`, `gallery.json`, `site.json`). Edited from the admin dashboard. |
+| `content/` | **Everything editable from the dashboard:** `blog.json`, `gallery.json`, `site.json` (contact details, partner schools and logos), `pages.json` (changed wording and pictures on the Products and Partner pages), `faqs.json`. `pages-schema.json` lists the editable items on those two pages (original text included). |
 | `admin/` | The admin dashboard: log in at `/admin` on the live site. See `ADMIN-SETUP.md`. |
 | `js/format.js`, `js/content.js`, `js/blog.js`, `js/gallery.js` | Load the content files and build the blog, article and gallery pages. |
 | `js/main.js` | Page switching, mobile menu, partner names strip, enquiry forms. |
@@ -27,7 +27,7 @@ Plain HTML, CSS and JavaScript (no build step), with Netlify Functions for the e
 
 ## Editing the website
 - **Blog posts, gallery, contact details, partner schools:** use the admin dashboard (`/admin`). No code needed.
-- **Other wording** (Products, Partner and Contact pages, FAQs) is in `index.html`. Search for the text to find it.
+- **Other wording** (Home, Gallery and Contact pages) is in `index.html`. Search for the text to find it. Products and Partner page wording can also be changed from the dashboard (the original text stays in `index.html`).
 - After the dashboard publishes, your computer's copy is behind GitHub: click **Sync Changes** in VS Code before editing code.
 
 ## Still to do

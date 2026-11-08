@@ -1,0 +1,676 @@
+{
+ "pages": [
+  {
+   "id": "products",
+   "title": "Products page",
+   "groups": [
+    {
+     "title": "Top of the page (hero)",
+     "fields": [
+      {
+       "key": "products.t01",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "School tools / Assessly"
+      },
+      {
+       "key": "products.t02",
+       "label": "Main heading",
+       "type": "text",
+       "def": "Less assessment admin. More room to teach."
+      },
+      {
+       "key": "products.t03",
+       "label": "Intro text",
+       "type": "area",
+       "def": "Meet Assessly: a school assessment tool for managing students, classes, question banks, tests, exams and results in one place."
+      },
+      {
+       "key": "products.t04",
+       "label": "Button text",
+       "type": "text",
+       "def": "Enquire about Assessly"
+      },
+      {
+       "key": "products.t05",
+       "label": "Link text",
+       "type": "text",
+       "def": "See how it works ↓"
+      },
+      {
+       "key": "products.t06",
+       "label": "Small note",
+       "type": "area",
+       "def": "Built for primary and secondary school teams."
+      }
+     ]
+    },
+    {
+     "title": "Section: From your class list to the final result",
+     "fields": [
+      {
+       "key": "products.t07",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "One connected workspace"
+      },
+      {
+       "key": "products.t08",
+       "label": "Heading",
+       "type": "text",
+       "def": "From your class list to the final result"
+      },
+      {
+       "key": "products.t09",
+       "label": "Intro text",
+       "type": "area",
+       "def": "Keep the everyday work of assessment together, rather than scattered across different tools."
+      },
+      {
+       "key": "products.t10",
+       "label": "Card 1 title",
+       "type": "text",
+       "def": "Students & classes"
+      },
+      {
+       "key": "products.t11",
+       "label": "Card 1 text",
+       "type": "area",
+       "def": "Keep student records organised by class, so each assessment reaches the right learners."
+      },
+      {
+       "key": "products.t12",
+       "label": "Card 2 title",
+       "type": "text",
+       "def": "Question banks"
+      },
+      {
+       "key": "products.t13",
+       "label": "Card 2 text",
+       "type": "area",
+       "def": "Build a reusable collection of questions by subject and topic. Prepare once, then refine as you teach."
+      },
+      {
+       "key": "products.t14",
+       "label": "Card 3 title",
+       "type": "text",
+       "def": "Tests & exams"
+      },
+      {
+       "key": "products.t15",
+       "label": "Card 3 text",
+       "type": "area",
+       "def": "Bring questions together into an assessment, assign a class and review the setup before delivery."
+      },
+      {
+       "key": "products.t16",
+       "label": "Card 4 title",
+       "type": "text",
+       "def": "Results that inform teaching"
+      },
+      {
+       "key": "products.t17",
+       "label": "Card 4 text",
+       "type": "area",
+       "def": "Review student and class results in one place, then use what you learn to plan the next lesson."
+      }
+     ]
+    },
+    {
+     "title": "Section: A clearer assessment workflow + Tools for teachers. Skills for students.",
+     "fields": [
+      {
+       "key": "products.t18",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "How Assessly fits in"
+      },
+      {
+       "key": "products.t19",
+       "label": "Heading",
+       "type": "text",
+       "def": "A clearer assessment workflow"
+      },
+      {
+       "key": "products.t20",
+       "label": "Intro text",
+       "type": "area",
+       "def": "A practical sequence for the people preparing, delivering and reviewing school assessments."
+      },
+      {
+       "key": "products.t21",
+       "label": "Card 1 title",
+       "type": "text",
+       "def": "Organise your school"
+      },
+      {
+       "key": "products.t22",
+       "label": "Card 1 text",
+       "type": "area",
+       "def": "Add students, create classes and make sure your records are ready."
+      },
+      {
+       "key": "products.t23",
+       "label": "Card 2 title",
+       "type": "text",
+       "def": "Prepare an assessment"
+      },
+      {
+       "key": "products.t24",
+       "label": "Card 2 text",
+       "type": "area",
+       "def": "Choose questions from your bank, build a test or exam and check the details."
+      },
+      {
+       "key": "products.t25",
+       "label": "Card 3 title",
+       "type": "text",
+       "def": "Review and respond"
+      },
+      {
+       "key": "products.t26",
+       "label": "Card 3 text",
+       "type": "area",
+       "def": "Find results, identify topics to revisit and plan your next steps."
+      },
+      {
+       "key": "products.i01",
+       "label": "Picture next to the “Tools for teachers” text",
+       "type": "image",
+       "def": "assets/images/assessly-dashboard.png",
+       "alt": "The Assessly school dashboard showing students, license balance, question bank and results"
+      },
+      {
+       "key": "products.t27",
+       "label": "Small label above the heading (2)",
+       "type": "text",
+       "def": "More than school software"
+      },
+      {
+       "key": "products.t28",
+       "label": "Heading (2)",
+       "type": "text",
+       "def": "Tools for teachers. Skills for students."
+      },
+      {
+       "key": "products.t29",
+       "label": "Intro text (2)",
+       "type": "area",
+       "def": "Assessly supports school assessment. Alongside it, SpotLight brings practical UI/UX design, web development and responsible AI projects into the classroom."
+      },
+      {
+       "key": "products.t30",
+       "label": "Intro text (3)",
+       "type": "area",
+       "def": "Explore a school partnership to connect your teaching goals with a hands-on digital skills pathway."
+      },
+      {
+       "key": "products.t31",
+       "label": "Button text",
+       "type": "text",
+       "def": "Explore school partnerships"
+      }
+     ]
+    },
+    {
+     "title": "Section: More ways to support school life",
+     "fields": [
+      {
+       "key": "products.t32",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "Coming soon"
+      },
+      {
+       "key": "products.t33",
+       "label": "Heading",
+       "type": "text",
+       "def": "More ways to support school life"
+      },
+      {
+       "key": "products.t34",
+       "label": "Intro text",
+       "type": "area",
+       "def": "We are exploring more ways to support teaching and learning. Follow our updates for future school tools. Assessly is the product to explore today."
+      }
+     ]
+    },
+    {
+     "title": "Section: Frequently Asked Questions",
+     "fields": [
+      {
+       "key": "products.t35",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "FAQ"
+      },
+      {
+       "key": "products.t36",
+       "label": "Heading",
+       "type": "text",
+       "def": "Frequently Asked Questions"
+      },
+      {
+       "key": "products.t37",
+       "label": "Intro text",
+       "type": "area",
+       "def": "A few useful answers before you get started."
+      }
+     ]
+    },
+    {
+     "title": "Banner at the bottom",
+     "fields": [
+      {
+       "key": "products.t38",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "Partner with us"
+      },
+      {
+       "key": "products.t39",
+       "label": "Heading",
+       "type": "text",
+       "def": "Make room for better assessment."
+      },
+      {
+       "key": "products.t40",
+       "label": "Text",
+       "type": "area",
+       "def": "Tell us how your school manages assessments today. Let’s explore where Assessly can help."
+      },
+      {
+       "key": "products.t41",
+       "label": "Button text",
+       "type": "text",
+       "def": "Enquire about Assessly"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "partner",
+   "title": "Partner page",
+   "groups": [
+    {
+     "title": "Top of the page (hero)",
+     "fields": [
+      {
+       "key": "partner.t01",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "Partner with SpotLight"
+      },
+      {
+       "key": "partner.t02",
+       "label": "Main heading",
+       "type": "text",
+       "def": "Your school. Their ideas. A place to build."
+      },
+      {
+       "key": "partner.t03",
+       "label": "Intro text",
+       "type": "area",
+       "def": "Bring hands-on UI/UX design, web development and responsible AI into your school. Let’s shape a practical learning pathway around your students and your teaching goals."
+      },
+      {
+       "key": "partner.t04",
+       "label": "Button text",
+       "type": "text",
+       "def": "Start a school enquiry"
+      },
+      {
+       "key": "partner.t05",
+       "label": "Small note",
+       "type": "area",
+       "def": "For primary and secondary school communities."
+      },
+      {
+       "key": "partner.i01",
+       "label": "Main picture at the top",
+       "type": "image",
+       "def": "assets/images/tool-assessly.jpg",
+       "alt": "Computers in a school lab"
+      },
+      {
+       "key": "partner.t06",
+       "label": "Picture caption",
+       "type": "area",
+       "def": "Start with the learners, the space and the tools you have. Build from there."
+      }
+     ]
+    },
+    {
+     "title": "Section: A starting point for your school + Practical digital skills for every student",
+     "fields": [
+      {
+       "key": "partner.t07",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "Who it’s for"
+      },
+      {
+       "key": "partner.t08",
+       "label": "Heading",
+       "type": "text",
+       "def": "A starting point for your school"
+      },
+      {
+       "key": "partner.t09",
+       "label": "Intro text",
+       "type": "area",
+       "def": "Different ages and school contexts call for different projects. We begin by understanding yours."
+      },
+      {
+       "key": "partner.t10",
+       "label": "Card 1 title",
+       "type": "text",
+       "def": "Primary schools"
+      },
+      {
+       "key": "partner.t11",
+       "label": "Card 1 text",
+       "type": "area",
+       "def": "Introduce creative digital thinking through guided, age-appropriate activities and small projects."
+      },
+      {
+       "key": "partner.t12",
+       "label": "Card 2 title",
+       "type": "text",
+       "def": "Secondary schools"
+      },
+      {
+       "key": "partner.t13",
+       "label": "Card 2 text",
+       "type": "area",
+       "def": "Connect design, code and responsible AI through projects students can build, test and explain."
+      },
+      {
+       "key": "partner.t14",
+       "label": "Card 3 title",
+       "type": "text",
+       "def": "School learning teams"
+      },
+      {
+       "key": "partner.t15",
+       "label": "Card 3 text",
+       "type": "area",
+       "def": "Explore a practical pathway with your teachers, digital learning lead or school leadership team."
+      },
+      {
+       "key": "partner.t16",
+       "label": "Small label above the heading (2)",
+       "type": "text",
+       "def": "Digital skills for schools"
+      },
+      {
+       "key": "partner.t17",
+       "label": "Heading (2)",
+       "type": "text",
+       "def": "Practical digital skills for every student"
+      },
+      {
+       "key": "partner.t18",
+       "label": "Intro text (2)",
+       "type": "area",
+       "def": "Explore design, web development and responsible AI through practical, age-appropriate projects."
+      },
+      {
+       "key": "partner.i02",
+       "label": "Card 1 picture",
+       "type": "image",
+       "def": "assets/images/card-design.jpg",
+       "alt": ""
+      },
+      {
+       "key": "partner.t19",
+       "label": "Card 1 title (2)",
+       "type": "text",
+       "def": "Product Design (UI/UX)"
+      },
+      {
+       "key": "partner.t20",
+       "label": "Card 1 text (2)",
+       "type": "area",
+       "def": "Students learn to plan and design apps people enjoy using, from sketches to clickable screens."
+      },
+      {
+       "key": "partner.i03",
+       "label": "Card 2 picture",
+       "type": "image",
+       "def": "assets/images/card-web.jpg",
+       "alt": ""
+      },
+      {
+       "key": "partner.t21",
+       "label": "Card 2 title (2)",
+       "type": "text",
+       "def": "Web Development"
+      },
+      {
+       "key": "partner.t22",
+       "label": "Card 2 text (2)",
+       "type": "area",
+       "def": "Hands-on HTML, CSS and JavaScript, building real pages step by step."
+      },
+      {
+       "key": "partner.i04",
+       "label": "Card 3 picture",
+       "type": "image",
+       "def": "assets/images/card-ai.jpg",
+       "alt": ""
+      },
+      {
+       "key": "partner.t23",
+       "label": "Card 3 title (2)",
+       "type": "text",
+       "def": "Prompting AI to build"
+      },
+      {
+       "key": "partner.t24",
+       "label": "Card 3 text (2)",
+       "type": "area",
+       "def": "How to guide AI tools to help plan, write and fix web and app projects responsibly."
+      }
+     ]
+    },
+    {
+     "title": "Section: A conversation before a classroom plan",
+     "fields": [
+      {
+       "key": "partner.t25",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "How we begin"
+      },
+      {
+       "key": "partner.t26",
+       "label": "Heading",
+       "type": "text",
+       "def": "A conversation before a classroom plan"
+      },
+      {
+       "key": "partner.t27",
+       "label": "Intro text",
+       "type": "area",
+       "def": "There is no need to have every detail worked out. Bring your questions and an outline of your goals."
+      },
+      {
+       "key": "partner.t28",
+       "label": "Card 1 title",
+       "type": "text",
+       "def": "Share your starting point"
+      },
+      {
+       "key": "partner.t29",
+       "label": "Card 1 text",
+       "type": "area",
+       "def": "Tell us about your learners, your goals and what is already available in school."
+      },
+      {
+       "key": "partner.t30",
+       "label": "Card 2 title",
+       "type": "text",
+       "def": "Shape a suitable pathway"
+      },
+      {
+       "key": "partner.t31",
+       "label": "Card 2 text",
+       "type": "area",
+       "def": "Discuss age groups, project ideas, teacher involvement and a workable approach to delivery."
+      },
+      {
+       "key": "partner.t32",
+       "label": "Card 3 title",
+       "type": "text",
+       "def": "Plan the practical details"
+      },
+      {
+       "key": "partner.t33",
+       "label": "Card 3 text",
+       "type": "area",
+       "def": "Agree the starting scope, timetable and preparation before taking the next step together."
+      }
+     ]
+    },
+    {
+     "title": "Section: You don’t need all the answers yet.",
+     "fields": [
+      {
+       "key": "partner.t34",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "Getting ready"
+      },
+      {
+       "key": "partner.t35",
+       "label": "Heading",
+       "type": "text",
+       "def": "You don’t need all the answers yet."
+      },
+      {
+       "key": "partner.t36",
+       "label": "Intro text",
+       "type": "area",
+       "def": "A few practical details help us discuss a realistic starting point. If something is still undecided, include it as a question in your enquiry."
+      },
+      {
+       "key": "partner.t37",
+       "label": "Link text",
+       "type": "text",
+       "def": "Looking for school assessment tools? Explore Assessly →"
+      },
+      {
+       "key": "partner.t38",
+       "label": "Checklist item 1 title",
+       "type": "text",
+       "def": "Learners & goals"
+      },
+      {
+       "key": "partner.t39",
+       "label": "Checklist item 1 text",
+       "type": "area",
+       "def": "Which year groups are involved, and what would you like them to make or learn?"
+      },
+      {
+       "key": "partner.t40",
+       "label": "Checklist item 2 title",
+       "type": "text",
+       "def": "Devices & connectivity"
+      },
+      {
+       "key": "partner.t41",
+       "label": "Checklist item 2 text",
+       "type": "area",
+       "def": "What computers, internet access and classroom space are available?"
+      },
+      {
+       "key": "partner.t42",
+       "label": "Checklist item 3 title",
+       "type": "text",
+       "def": "Time & people"
+      },
+      {
+       "key": "partner.t43",
+       "label": "Checklist item 3 text",
+       "type": "area",
+       "def": "Who will coordinate the programme, and where could sessions fit in the timetable?"
+      },
+      {
+       "key": "partner.t44",
+       "label": "Checklist item 4 title",
+       "type": "text",
+       "def": "Safe & responsible use"
+      },
+      {
+       "key": "partner.t45",
+       "label": "Checklist item 4 text",
+       "type": "area",
+       "def": "What school policies guide accounts, student privacy and the use of AI tools?"
+      }
+     ]
+    },
+    {
+     "title": "Section: Frequently Asked Questions",
+     "fields": [
+      {
+       "key": "partner.t46",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "FAQ"
+      },
+      {
+       "key": "partner.t47",
+       "label": "Heading",
+       "type": "text",
+       "def": "Frequently Asked Questions"
+      },
+      {
+       "key": "partner.t48",
+       "label": "Intro text",
+       "type": "area",
+       "def": "A few useful answers before you get started."
+      }
+     ]
+    },
+    {
+     "title": "Section: What would you like your students to build?",
+     "fields": [
+      {
+       "key": "partner.t49",
+       "label": "Small label above the heading",
+       "type": "text",
+       "def": "Let’s start with your school"
+      },
+      {
+       "key": "partner.t50",
+       "label": "Heading",
+       "type": "text",
+       "def": "What would you like your students to build?"
+      },
+      {
+       "key": "partner.t51",
+       "label": "Intro text",
+       "type": "area",
+       "def": "Tell us where you are today and where you’d like to go. This enquiry starts a conversation; it is not a commitment to a programme."
+      },
+      {
+       "key": "partner.i05",
+       "label": "Picture beside the enquiry form",
+       "type": "image",
+       "def": "assets/images/card-design.jpg",
+       "alt": "Website design on a screen"
+      },
+      {
+       "key": "partner.t52",
+       "label": "Link text",
+       "type": "text",
+       "def": "Have a different question? Contact Us →"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

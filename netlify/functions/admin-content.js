@@ -8,6 +8,10 @@ exports.handler = async (event) => {
   try {
     const out = { ok: true };
     for (const n of ["site", "blog", "gallery"]) out[n] = JSON.parse(await readFile(`content/${n}.json`));
+    const optional = { pages: { text: {}, images: {} }, faqs: { home: [], products: [], partner: [], contact: [] } };
+    for (const n of Object.keys(optional)) {
+      try { out[n] = JSON.parse(await readFile(`content/${n}.json`)); } catch (e) { if (e.status !== 404) throw e; out[n] = optional[n]; }
+    }
     return json(200, out);
   } catch (e) {
     console.error("admin-content", e.status || "", e.detail || e.message);
